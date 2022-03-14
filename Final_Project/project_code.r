@@ -2,7 +2,7 @@
 
 # 1.Load the seedling growth data
 libattery <- read.csv("lithium-ion batteries.csv")
-head(libat)
+head(libattery)
 
 # 2.Temporary save of the raw data, and drop "Material Id" (identifier)
 data <- libattery[ -c(1)]
