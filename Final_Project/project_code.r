@@ -18,20 +18,23 @@ names(lbdata)[names(lbdata) == "Crystal.System"] <- "Crystal"
 # 4. Find the total count of climbs in each season
 aggregate(E_Formation ~ Spacegroup, data = lbdata, FUN = mean)
 
-# . Linear regression model for Volume to Nsite
-df <- data.frame(x = lbdata$Nsites, y = lbdata$Volume)
+# 5. Linear regression model for Volume to Nsite
+data_VN <- data.frame(Volume = lbdata$Volume, Nsites = lbdata$Nsites)
 
-# create multiple linear model
-linear_model <- lm(y ~ x, data=df)
+# 6. Fit linear regression model to dataset and view model summary
+linear_model <- lm(Volume ~ Nsites, data=data_VN)
+summary(linear_model)
 
-# save predictions of the model in the new data frame 
-predicted_df <- data.frame(pred = predict(lm_fit, df), hp=df$hp)
-print(summary(linear_model))
+# 7. Create plot to visualize fitted linear regression model
+library(ggplot2)
+p <- ggplot(data,aes(x, y)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ x, method='lm', color='turquoise4') +
+  theme_minimal() +
+  labs(x='Nsites', y='Volume', title='Linear Regression Plot') +
+  theme(plot.title = element_text(hjust=0.5, size=20, face='bold')) 
+print(p)
 
-require(ggplot2)
-ggplot(df, aes(x = lbdata$Nsites, y = y)) + 
-  geom_point() +
-  stat_smooth(method = "lm", col = "red")
-
-
+# 8. Add new column of Band
+data_VNB <- cbind(data_VN, Bandstructure = lbdata$Bandstructure)
 
